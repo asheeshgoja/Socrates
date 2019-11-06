@@ -1,0 +1,4 @@
+(load SocratesExpertSystemRules.clp)
+(reset)
+(run)
+
