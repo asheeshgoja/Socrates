@@ -1,0 +1,16 @@
+{
+    "name": "socrates_wrapper",
+    "description": "socrates wrapper over c++ app",
+    "version": "0.0.1",
+    "devDependencies": {},
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1",
+        "express-ws": "^4.0.0",
+        "request": "^2.88.0",
+        "socket.io": "^2.3.0"
+    },
+    "scripts": {
+        "start": "nodejs app.js"
+    }
+}

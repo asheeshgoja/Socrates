@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Socrates App
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item class="top">
+
+    <ion-label >{{inputText}}</ion-label>
+    <!-- [(ngModel)]="choices_list" -->
+    <ion-select  (ionChange)="onChoicesListChange($event)" interface="popover" >
+        <ion-select-option *ngFor="let choice of choices">{{choice}}</ion-select-option>
+    </ion-select>
+
+    <!-- <ion-button (click)="askClicked($event)">Respond</ion-button> -->
+  </ion-item>
+
+  <ion-item >
+    <ion-textarea rows=6 style='--background:cyan' [(ngModel)]="outputText"></ion-textarea>
+  </ion-item>
+
+</ion-content>

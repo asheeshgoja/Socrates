@@ -499,7 +499,7 @@
 
 (deffunction ask 
    (?question ?choices ?range)
-   (if (eq (length$ ?range) 0) then (printout t ?question ?choices ":") else (printout t ?question "range-" $?range ":"))
+   (if (eq (length$ ?range) 0) then (printout t "["?question"]" ?choices ":") else (printout t "["?question"]" "range-" $?range ":"))
    (bind ?answer (read) )
    (if (eq (length$ ?range) 0)
 	then  (while (not (member$ ?answer ?choices)) do
