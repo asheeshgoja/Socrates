@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header translucent>
   <ion-toolbar>
     <ion-title>
       Socrates App
@@ -6,20 +6,39 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
   <ion-item class="top">
 
-    <ion-label >{{inputText}}</ion-label>
+    <ion-label>{{inputText}}</ion-label>
     <!-- [(ngModel)]="choices_list" -->
-    <ion-select  (ionChange)="onChoicesListChange($event)" interface="popover" >
-        <ion-select-option *ngFor="let choice of choices">{{choice}}</ion-select-option>
+    <ion-select [(ngModel)]="choices_selectbox" *ngIf="choices != null" (ionChange)="onChoicesListChange($event)"
+      interface="popover">
+      <ion-select-option *ngFor="let choice of choices">{{choice}}</ion-select-option>
     </ion-select>
+
+    <ion-item *ngIf="range != null">
+      <ion-input inputmode="numeric" [(ngModel)]="selectedRange" required="true" clearInput=true  (ionChange)="onInputTextChange($event.target.value)"></ion-input>
+      <ion-button *ngIf="this.validInput" (click)="onSendInput($event)">&#10003;</ion-button>
+    </ion-item>
+
+    <!-- <ion-item *ngIf="range != null">
+      <ion-range [(ngModel)]="selectedRange" min={{range.min}} max={{range.max}} color="secondary" pin
+        (ionChange)="onRangeChange($event)">
+        <ion-icon slot="start" size="small" name="contrast"></ion-icon>
+        <ion-icon slot="end" name="contrast"></ion-icon>
+      </ion-range>
+    </ion-item> -->
 
     <!-- <ion-button (click)="askClicked($event)">Respond</ion-button> -->
   </ion-item>
 
-  <ion-item >
+  <!-- <ion-item>
     <ion-textarea rows=6 style='--background:cyan' [(ngModel)]="outputText"></ion-textarea>
-  </ion-item>
+  </ion-item> -->
+
+  <h1 *ngIf="this.results != null">Result : {{this.results.factor}} , {{this.results.married}} ,
+    {{this.results.not_married}} </h1>
+
+  <ion-button (click)="resetClicked($event)">Reset</ion-button>
 
 </ion-content>

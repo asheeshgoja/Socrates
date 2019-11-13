@@ -499,7 +499,7 @@
 
 (deffunction ask 
    (?question ?choices ?range)
-   (if (eq (length$ ?range) 0) then (printout t "["?question"]" ?choices ":") else (printout t "["?question"]" "range-" $?range ":"))
+   (if (eq (length$ ?range) 0) then (printout t "["?question"]" ?choices ":" "~") else (printout t "["?question"]" "range-" $?range ":"  "~"))
    (bind ?answer (read) )
    (if (eq (length$ ?range) 0)
 	then  (while (not (member$ ?answer ?choices)) do
@@ -682,7 +682,7 @@
     (printout t crlf crlf)
     (printout t "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
         		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
-        		"staying single is " (- 100 ?cf) " %" crlf crlf)
+        		"staying single is " (- 100 ?cf) " %~" crlf crlf)
      (printout results_file "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
         		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
         		"staying single is " (- 100 ?cf) " %" crlf crlf)
