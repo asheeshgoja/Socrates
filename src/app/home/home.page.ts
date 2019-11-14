@@ -11,14 +11,16 @@ import { Socket } from 'ngx-socket-io';
 export class HomePage implements OnInit {
 
   inputText: string = 'Clips Response';
-  outputText: String = '';
+  outputText: string = '';
   choices = [];
-  choices_list: String = null;
+  choices_list: string = null;
   range = null;
-  selectedRange: String = null;
+  selectedRange: string = null;
   results = null;
   choices_selectbox = null;
-  validInput : boolean = false;
+  validInput: boolean = false;
+  matchFactors = [];
+  questionAnswers = [];
 
   constructor(private socket: Socket) {
   }
@@ -50,7 +52,7 @@ export class HomePage implements OnInit {
       var match_results = regex_results.exec(response);
 
       if (match_choice != null) {
-        this.choices_selectbox  = null;
+        this.choices_selectbox = null;
         this.inputText = match_choice[1];
         this.choices = match_choice[2].split(' ');
         this.range = null;
@@ -61,29 +63,43 @@ export class HomePage implements OnInit {
         let rngArr = match_range[2].split(' ');
         this.range = { min: parseInt(rngArr[0]), max: parseInt(rngArr[1]) }
         this.choices = null;
+        this.selectedRange = null;
       }
 
 
-      if (match_results != null) {
-        this.results = { factor: match_results[1], married: match_results[2], not_married: match_results[3] }
-      }
 
+      if (response.includes('~.')) {
+        let arr = response.split('~.');
+
+        arr.forEach(e => {
+          let regex_results = /.*'(.*)'.*getting married is (.*) % and.*single is (.*) %/;
+          var match_results = regex_results.exec(e);
+          if (match_results != null) {
+            this.results = { factor: match_results[1], married: match_results[2], not_married: match_results[3] }
+          }
+
+          let regex_factor = /Factor (.*),.*rating:(.*) %/;
+          var match_factor = regex_factor.exec(e);
+          if (match_factor != null) {
+            this.matchFactors.push({ factor: match_factor[1], value: match_factor[2] });
+          }
+
+          let regex_qna = /QUESTION: (.*)\?\..*ANSWER:(.*)/;
+          e = e.replace('~CLIPS>', "");
+          var match_qna = regex_qna.exec(e);
+          if (match_qna != null) {
+            this.questionAnswers.push({ question: match_qna[1], answer: match_qna[2] });
+          }
+
+        });
+      }
 
       this.outputText = response;
-      // if (data['event'] === 'left') {
-      //   //this.showToast('User left: ' + user);
-      // } else {
-      //   //this.showToast('User joined: ' + user);
-      // }
-    });
-
-    this.socket.fromEvent('message').subscribe(message => {
-      //this.messages.push(message);
     });
   }
 
 
-  resetClicked() {
+  resetClicked(e) {
     this.results = null;
     let name = `user-${new Date().getTime()}`;
     this.socket.emit('start_clips', name);
@@ -93,22 +109,19 @@ export class HomePage implements OnInit {
     this.socket.emit('user_response', e.target.value);
   }
 
-  // onRangeChange(e) {
-  //   this.socket.emit('user_response', this.selectedRange);
-  // }
-
-  onInputTextChange(){
+  onInputTextChange(e) {
     let v = parseInt(this.selectedRange);
 
-    if(this.range.min <= v &&  this.range.max >= v){
+    if (this.range.min <= v && this.range.max >= v) {
       this.validInput = true;
-    }else{
+    } else {
       this.validInput = false;
     }
   }
 
-  onSendInput(){
+  onSendInput(e) {
     this.socket.emit('user_response', this.selectedRange);
   }
 
+ 
 }

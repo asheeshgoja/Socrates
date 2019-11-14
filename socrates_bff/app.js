@@ -43,35 +43,6 @@ var processStdout = (data) => {
     }
 }
 
-var main = () => {
-
-    // if (child == null) {        
-    //     child = spawn(__dirname + '\\CLIPSDOS64.exe');
-    //     child.stdin.write('(load C:/socrates/Socrates/socrates_bff/SocratesExpertSystemRules.clp)\n');
-    //     return;
-    // }
-    //const child = spawn('clips');
-
-    // process.stdin.pipe(child.stdin)
-    // child.stdout.pipe(process.stdout);
-
-    // child.stdin.setEncoding('utf-8');
-
-
-    // child.stdout.on('data', (data) => {
-
-    // });
-
-    // child.on('exit', function () {
-    //     process.exit()
-    // })
-    //setTimeout(() => {
-    // child.stdin.write('(load C:/socrates/Socrates/socrates_bff/SocratesExpertSystemRules.clp)\n');
-    // child.stdin.write('(reset)\n');
-    // child.stdin.write('(run)\n');
-    //}, 3000);
-}
-
 io.on('connection', (socket) => {
 
     socket.on('disconnect', function () {
@@ -86,7 +57,7 @@ io.on('connection', (socket) => {
         }
 
         child = spawn(__dirname + '\\CLIPSDOS64.exe');
-        child.stdin.write('(load C:/socrates/Socrates/socrates_bff/SocratesExpertSystemRules.clp)\n');
+        child.stdin.write('(load SocratesExpertSystemRules.clp)\n');
 
         process.stdin.pipe(child.stdin)
         child.stdin.setEncoding('utf-8');

@@ -7,38 +7,65 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <ion-item class="top">
+  <ion-button *ngIf="this.results != null" (click)="resetClicked($event)">Reset</ion-button>
+  <ion-item *ngIf="this.results == null" class="top">
+    <ion-label class="ion-text-wrap">{{inputText}}</ion-label>
 
-    <ion-label>{{inputText}}</ion-label>
-    <!-- [(ngModel)]="choices_list" -->
     <ion-select [(ngModel)]="choices_selectbox" *ngIf="choices != null" (ionChange)="onChoicesListChange($event)"
       interface="popover">
       <ion-select-option *ngFor="let choice of choices">{{choice}}</ion-select-option>
     </ion-select>
-
-    <ion-item *ngIf="range != null">
-      <ion-input inputmode="numeric" [(ngModel)]="selectedRange" required="true" clearInput=true  (ionChange)="onInputTextChange($event.target.value)"></ion-input>
-      <ion-button *ngIf="this.validInput" (click)="onSendInput($event)">&#10003;</ion-button>
-    </ion-item>
-
-    <!-- <ion-item *ngIf="range != null">
-      <ion-range [(ngModel)]="selectedRange" min={{range.min}} max={{range.max}} color="secondary" pin
-        (ionChange)="onRangeChange($event)">
-        <ion-icon slot="start" size="small" name="contrast"></ion-icon>
-        <ion-icon slot="end" name="contrast"></ion-icon>
-      </ion-range>
-    </ion-item> -->
-
-    <!-- <ion-button (click)="askClicked($event)">Respond</ion-button> -->
   </ion-item>
 
-  <!-- <ion-item>
-    <ion-textarea rows=6 style='--background:cyan' [(ngModel)]="outputText"></ion-textarea>
-  </ion-item> -->
 
-  <h1 *ngIf="this.results != null">Result : {{this.results.factor}} , {{this.results.married}} ,
-    {{this.results.not_married}} </h1>
+  <ion-item *ngIf="range != null">
+    <ion-input inputmode="numeric" [(ngModel)]="selectedRange" required="true" clearInput=true
+      (ionChange)="onInputTextChange($event.target.value)" placeholder="valid range {{range.min}} to {{range.max}}">
+    </ion-input>
+    <ion-button *ngIf="this.validInput" (click)="onSendInput($event)">&#10003;</ion-button><br><br>
+  </ion-item>
 
-  <ion-button (click)="resetClicked($event)">Reset</ion-button>
+
+  <ion-grid *ngIf="this.results != null">
+    <ion-row>
+      <ion-col>
+        <div>Results</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div>{{this.results.factor}} , {{this.results.married}} ,{{this.results.not_married}}</div>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row>
+      <ion-col>
+        <br>
+        <div>Factors</div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let matchFactor of matchFactors">
+      <ion-col>
+        <div>{{matchFactor.factor}} , {{matchFactor.value}}</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <br>
+        <div>Your responses</div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let questionAnswer of questionAnswers">
+      <ion-col>
+        <div>{{questionAnswer.question}} , {{questionAnswer.answer}}</div>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+  <br><br>
+
+
 
 </ion-content>

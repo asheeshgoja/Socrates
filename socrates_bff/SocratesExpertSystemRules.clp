@@ -683,21 +683,17 @@
     (printout t "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
         		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
         		"staying single is " (- 100 ?cf) " %~" crlf crlf)
-     (printout results_file "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
-        		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
-        		"staying single is " (- 100 ?cf) " %" crlf crlf)
-    ;    (printout t crlf crlf "Based on your responses and following factors the marriage advisor's confidence favouring " crlf "getting married is " ?cf " % and" crlf "staying single is " (- 100 ?cf) " %" crlf crlf)
-;	(printout results_file "Based on your responses and following factors the marriage advisor's confidence favouring " crlf "getting married is " ?cf " % and" crlf "staying single is " (- 100 ?cf) " %" crlf crlf)        
-)
+    ; (printout results_file "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
+    ;     		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
+    ;     		"staying single is " (- 100 ?cf) " %" crlf crlf)
+ )
 
 (defrule print-conclusions
     (declare (salience -5000))
     ?c<- (conclusion (confidence-factor ?cf) (name ?n&~final-get-married-factor))
-;    (not (exists (question (factor ?factor) (has-pre-condition no ) )))
-;    (answer (known-factor ?factor))
     =>
-    (printout t ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %" crlf)    
-    (printout results_file ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %" crlf)
+    (printout t ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %~" crlf)    
+    ; (printout results_file ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %" crlf)
 )
 
 (defrule print-questions-answerd
@@ -706,7 +702,7 @@
     (answer (known-factor ?f) (value ?a))
 
     =>
-    (printout t ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a crlf)   
-    (printout questions_file ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a crlf)    
+    (printout t ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a "~"crlf)   
+    ; (printout questions_file ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a crlf)    
 )
 
