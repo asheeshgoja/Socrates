@@ -15,7 +15,8 @@ const child_process = require('child_process');
 const { spawn } = require('child_process');
 
 
-const htmlPath = '/www';
+// const htmlPath = '/www';
+const htmlPath = 'C:/socrates/Socrates/www';
 
 //app.use(express.static(__dirname + '/images/'))
 app.use(bodyParser.json())
@@ -61,8 +62,8 @@ io.on('connection', (socket) => {
             child.kill('SIGINT');
         }
 
-        // child = spawn(__dirname + '\\CLIPSDOS64.exe');
-        child = spawn('clips');
+         child = spawn(__dirname + '\\CLIPSDOS64.exe');
+        //child = spawn('clips');
         child.stdin.write('(load SocratesExpertSystemRules.clp)\n');
 
         process.stdin.pipe(child.stdin)
@@ -90,7 +91,7 @@ io.on('connection', (socket) => {
 
 var port = process.env.PORT || 80;
 
-server.listen(port, function() {
+server.listen(port, "0.0.0.0", function() {
     console.log('listening in http://localhost:' + port);
 
 
