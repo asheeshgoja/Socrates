@@ -21,6 +21,10 @@ export class HomePage implements OnInit {
   validInput: boolean = false;
   matchFactors = [];
   questionAnswers = [];
+  results_image_source = null;
+  results_caption = null; 
+  showGrid = false;
+  showResponses = false;
 
   constructor(private socket: Socket) {
   }
@@ -75,7 +79,35 @@ export class HomePage implements OnInit {
           let regex_results = /.*'(.*)'.*getting married is (.*) % and.*single is (.*) %/;
           var match_results = regex_results.exec(e);
           if (match_results != null) {
-            this.results = { factor: match_results[1], married: match_results[2], not_married: match_results[3] }
+            this.results = { confidence_factor: match_results[1], married: match_results[2], not_married: match_results[3] }
+            let cf = this.results.confidence_factor;
+            // cf = 'low';
+            let succ_fac = Math.round( parseInt(this.results.married)); 
+            let fail_fac = Math.round( parseInt(this.results.not_married));
+
+            switch (cf) {
+              case "extremely low":
+                this.results_image_source = "../assets/imgs/extremely low.jpg";
+                this.results_caption = `Socrates Artificial Intelligence recommends that you not get married, as the likelyhood of a failed marriage is ${fail_fac} %`;
+                break;
+              case "low":
+                this.results_image_source = "../assets/imgs/low.png";
+                this.results_caption = `Socrates Artificial Intelligence recommends that you not get married, as the likelyhood of a failed marriage is ${fail_fac} %`;
+                break;
+              case "average":
+                this.results_image_source = "../assets/imgs/average.jpg";
+                this.results_caption = `Socrates Artificial Intelligence predicts that you have an average likelyhood of a successful marrige with a likelyhood of ${succ_fac} %`;
+                break;
+              case "high":
+                this.results_image_source = "../assets/imgs/high.jpg";
+                this.results_caption = `Socrates Artificial Intelligence predicts that you will have a successful marriage with a likelyhood of ${succ_fac} %`;
+                break;
+              case "extremely high":
+                this.results_image_source = "../assets/imgs/extremely high.jpg";
+                this.results_caption = `Socrates Artificial Intelligence predicts that you will have a very successful marriage with a likelyhood of ${succ_fac} %`;
+                break;
+            }
+
           }
 
           let regex_factor = /Factor (.*),.*rating:(.*) %/;
@@ -103,25 +135,46 @@ export class HomePage implements OnInit {
     this.results = null;
     let name = `user-${new Date().getTime()}`;
     this.socket.emit('start_clips', name);
+    this.showGrid = false;
+    this.showResponses = false;
   }
 
   onChoicesListChange(e) {
     this.socket.emit('user_response', e.target.value);
   }
 
-  onInputTextChange(e) {
+  validateResponse() {
     let v = parseInt(this.selectedRange);
 
     if (this.range.min <= v && this.range.max >= v) {
-      this.validInput = true;
+      document.getElementById("range_input").style.setProperty('color', 'green');
+      return true;
     } else {
-      this.validInput = false;
+      document.getElementById("range_input").style.setProperty('color', 'red');
+      return false;
     }
+  }
+
+  onInputTextChange(e) {
+    this.validInput = this.validateResponse();
   }
 
   onSendInput(e) {
     this.socket.emit('user_response', this.selectedRange);
   }
 
- 
+  keyupEnter() {
+    if (this.validateResponse()) {
+      this.socket.emit('user_response', this.selectedRange);
+    }
+  }
+
+  onShowReasoning(e){
+    this.showGrid = !this.showGrid
+  }
+
+  onShowResponses(e){
+    this.showResponses = !this.showResponses
+  }
+
 }

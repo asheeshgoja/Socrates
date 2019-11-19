@@ -19,25 +19,39 @@
 
 
   <ion-item *ngIf="range != null">
-    <ion-input inputmode="numeric" [(ngModel)]="selectedRange" required="true" clearInput=true
-      (ionChange)="onInputTextChange($event.target.value)" placeholder="valid range {{range.min}} to {{range.max}}">
+    <ion-input id="range_input" [(ngModel)]="selectedRange" required="true" clearInput=true type="number" pattern="\d*"
+      (ionChange)="onInputTextChange($event.target.value)" (keyup.enter)="keyupEnter()"
+      placeholder="valid range {{range.min}} to {{range.max}}">
     </ion-input>
-    <ion-button *ngIf="this.validInput" (click)="onSendInput($event)">&#10003;</ion-button><br><br>
+    <ion-button *ngIf="this.validInput" (click)="onSendInput($event)">&#8594;</ion-button><br><br>
   </ion-item>
 
 
-  <ion-grid *ngIf="this.results != null">
-    <ion-row>
-      <ion-col>
-        <div>Results</div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div>{{this.results.factor}} , {{this.results.married}} ,{{this.results.not_married}}</div>
-      </ion-col>
-    </ion-row>
+  <div *ngIf="this.results != null" class="list card">
 
+    <div class="item item-avatar">
+      <img src={{results_image_source}}>
+      <h2 style="font-family: Pacifico;text-align: center;">Congratulations !!</h2>
+
+    </div>
+
+    <div class="item item-image">
+      <ion-row>
+        <ion-col size="2">
+          <img *ngIf="results_image_source" src="../assets/imgs/brain.jpg">
+        </ion-col>
+        <ion-col size="10">
+          <p style="font-family: Leckerli One;color: blueviolet;">{{results_caption}}</p>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div>
+      <ion-button (click)="onShowReasoning($event)">why</ion-button>
+    </div>
+  </div>
+
+
+  <ion-grid *ngIf="this.showGrid">
 
     <ion-row>
       <ion-col>
@@ -47,19 +61,22 @@
     </ion-row>
     <ion-row *ngFor="let matchFactor of matchFactors">
       <ion-col>
-        <div>{{matchFactor.factor}} , {{matchFactor.value}}</div>
+        <div>{{matchFactor.factor}} : {{matchFactor.value}}</div>
       </ion-col>
     </ion-row>
-
     <ion-row>
+        <ion-button (click)="onShowResponses($event)">Responses</ion-button>
+    </ion-row>
+
+    <ion-row *ngIf="this.showResponses">
       <ion-col>
         <br>
         <div>Your responses</div>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let questionAnswer of questionAnswers">
-      <ion-col>
-        <div>{{questionAnswer.question}} , {{questionAnswer.answer}}</div>
+    <ion-row   *ngFor="let questionAnswer of questionAnswers">
+      <ion-col *ngIf="this.showResponses">
+        <div>{{questionAnswer.question}} : {{questionAnswer.answer}}</div>
       </ion-col>
     </ion-row>
 
