@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: socrates-socket-server-https-loadbalancer-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: socrates-socket-server-service
+              servicePort: 6001
+          # Below is the important part!
+          - path: /ws/
+            backend:
+              serviceName: socrates-socket-server-service
+              servicePort: 6001

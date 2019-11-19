@@ -12,8 +12,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
-
+// const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
+const config: SocketIoConfig = { url: '/', options: {} };
 
 @NgModule({
   declarations: [AppComponent],

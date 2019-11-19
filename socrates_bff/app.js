@@ -15,13 +15,18 @@ const child_process = require('child_process');
 const { spawn } = require('child_process');
 
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use('/', express.static(__dirname));
+const htmlPath = '/www';
 
-// app.get('/', function (req, res) {
-//     res.sendFile('main.html', { root: __dirname });
-// });
+//app.use(express.static(__dirname + '/images/'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(express.static(htmlPath))
+
+app.get('/*', (req, res) => {
+        res.sendFile(htmlPath + '/index.html');
+})
+
 
 var child;
 var stdout_buffer = '';
@@ -45,7 +50,7 @@ var processStdout = (data) => {
 
 io.on('connection', (socket) => {
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function() {
         io.emit('users-changed', { user: socket.username, event: 'left' });
     });
 
@@ -56,7 +61,8 @@ io.on('connection', (socket) => {
             child.kill('SIGINT');
         }
 
-        child = spawn(__dirname + '\\CLIPSDOS64.exe');
+        // child = spawn(__dirname + '\\CLIPSDOS64.exe');
+        child = spawn('clips');
         child.stdin.write('(load SocratesExpertSystemRules.clp)\n');
 
         process.stdin.pipe(child.stdin)
@@ -82,9 +88,9 @@ io.on('connection', (socket) => {
     // });
 });
 
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 80;
 
-server.listen(port, function () {
+server.listen(port, function() {
     console.log('listening in http://localhost:' + port);
 
 

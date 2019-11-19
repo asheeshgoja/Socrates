@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: socrates-socket-server-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: socrates-socket-server
+    spec:
+      containers:
+      - name: socrates-socket-server
+        image: "gcr.io/agoja-sandbox/clips-socrates:latest"
+        imagePullPolicy: Always
+        ports:
+        - name: http-server
+          containerPort: 80
+        env:
+        - name: "PORT"
+          value: "80"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: socrates-socket-server
+  name: socrates-socket-server-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    targetPort: http-server
+    protocol: TCP
+  selector:
+    app: socrates-socket-server
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+

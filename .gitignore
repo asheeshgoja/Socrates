@@ -29,3 +29,5 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+/socrates_bff/www
+/socrates_bff/node_modules

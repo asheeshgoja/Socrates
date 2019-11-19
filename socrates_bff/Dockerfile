@@ -10,13 +10,20 @@ RUN apt-get -y install nodejs
 
 WORKDIR /build
 
-EXPOSE 8080
+EXPOSE 80
 COPY ./SocratesExpertSystemRules.clp .
 COPY ./run_clp_file .
 COPY ./app.js .
 COPY ./package.json .
+COPY ./www  /www
 
 RUN npm install
-CMD [ "npm", "start" ]
+RUN npm install -g forever
+
+CMD ["forever", "-c", "node", "app.js"]
+
+
+# ENTRYPOINT  [ "forever", "start" , "app.js" ]
+# CMD [ "npm", "start" ]
 
 # CMD ["clips", "-f", "run_clp_file"]
