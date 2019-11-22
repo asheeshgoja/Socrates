@@ -42,7 +42,7 @@ var processStdout = (data) => {
     r = r.replace(/[\r\n]+/gm, "");
     console.log(r);
 
-    let socket_id_regex = /.*#(.*)#/;
+    let socket_id_regex = /.*~<(.*)>/;
     let match = socket_id_regex.exec(r);
     let socketid;
     if (match != null) {
@@ -52,10 +52,8 @@ var processStdout = (data) => {
     stdout_buffer += r;
     if (socketid) {
         // console.log('emit : ' + r);
-        // let sock = io.sockets.connected[socketUUID_to_SocketId[socketid]];
-        // sock.emit('clips_response', { response: stdout_buffer });
-        let id = socketUUID_to_SocketId[socketid];
-        io.to(socketid).emit('clips_response', { response: stdout_buffer });
+        let sock = io.sockets.connected[socketUUID_to_SocketId[socketid]];
+        sock.emit('clips_response', { response: stdout_buffer });
         stdout_buffer = '';
     }
 }
@@ -78,7 +76,6 @@ io.on('connection', (socket) => {
             socket.childprocess = child;
         }
 
-        socket.join(socketUUID);
         socketUUID_to_SocketId[socketUUID] = socket.id;
 
         //child = spawn('clips');
@@ -88,7 +85,7 @@ io.on('connection', (socket) => {
             if (err) {
                 return console.log(err);
             }
-            var result = data.replace(/{user_id}/gm, socketUUID);
+            var result = data.replace("{user_id}", socketUUID);
 
             fs.writeFile(newFileName, result, 'utf8', function (err) {
                 if (err) return console.log(err);
@@ -104,13 +101,15 @@ io.on('connection', (socket) => {
                 child.stdin.write('(run)\n');
             });
         });
+
+
+
     });
 
     socket.on('user_response', (response, info) => {
         // socket.username = name;
         // io.emit('users-changed', { user: name, event: 'joined' });
         if (response != null) {
-            socket.join(info.userid);
             socketUUID_to_SocketId[info.userid] = info.sock_id;
             let child_proc = socketUUID_to_childprocess[info.userid];
             // child_proc = socket.childprocess;
@@ -121,22 +120,13 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('close_session', (response, info) => {
-        let newFileName = __dirname + "/SocratesExpertSystemRules.clp." + info.userid;
-        fs.unlink(newFileName, (err) => {
-            if (err) {
-                console.log("failed to delete file" + err);
-            } 
-        });
-
-        socket.leave(info.sock_id);
-    });
-
 });
 
 var port = process.env.PORT || 80;
 
 server.listen(port, "0.0.0.0", function () {
     console.log('listening in http://localhost:' + port);
+
+
 
 });
