@@ -24,7 +24,6 @@
     (slot has-pre-condition (type SYMBOL) (default no)))
     ;(slot already-asked  (allowed-values yes no)(default no)))
 
-
 (deffacts questions 
     (question (factor your-MBTI)(question-to-ask "What is your MBTI [choose dont-know if you dont know]?") (choices dont-know ISTJ ISFJ INFJ INTJ ISTP ISFP INFP INTP ESTP ESFP ENFP ENTP ESTJ ESFJ ENFJ ENTJ))
     (question (factor your-partner-MBTI)(question-to-ask "What is MBTI of the person you wish to marry [choose dont-know if you dont know]?") (choices dont-know ISTJ ISFJ INFJ INTJ ISTP ISFP INFP INTP ESTP ESFP ENFP ENTP ESTJ ESFJ ENFJ ENTJ))
@@ -237,6 +236,7 @@
 
 ;***********************************************derived facts****************************************************************************
 ;****************************************************************************************************************************************
+
 (deftemplate answer
     (slot known-factor  (default none))
     (slot value (default none)) 
@@ -498,18 +498,18 @@
 ;)
 
 (deffunction ask 
-   (?question ?choices ?range)
-   (if (eq (length$ ?range) 0) then (printout t "["?question"]" ?choices ":" "~") else (printout t "["?question"]" "range-" $?range ":"  "~"))
+   (?question ?choices ?range ?uid)
+   (if (eq (length$ ?range) 0) then (printout t "["?question"]" ?choices ":" "~#" ?uid "#") else (printout t "["?question"]" "range-" $?range ":"  "~#" ?uid "#"))
    (bind ?answer (read) )
    (if (eq (length$ ?range) 0)
 	then  (while (not (member$ ?answer ?choices)) do
 ;		  (printout t ?question ?choices)
-          (printout t "Invalid option! Please specify one of these options" ?choices ":" ) 
+          (printout t "Invalid option! Please specify one of these options" ?choices ":" "#" ?uid "#" ) 
 		  (bind ?answer (read))
 		  (if (lexemep ?answer) then (bind ?answer (lowcase ?answer))))
     ;else  (while (eq (check-range (list-to-field ?range 1) (list-to-field ?range 2) ?answer) 0 )   do
     else  (while (eq (check-range (nth$ 1 ?range ) (nth$ 2 ?range ) ?answer) 0 )   do
-		      (printout t "Invalid input! Please specify a value within the range" $?range ":")
+		      (printout t "Invalid input! Please specify a value within the range" $?range ":" "#" ?uid "#")
 		      (bind ?answer (read))
 		      (if (lexemep ?answer) then (bind ?answer (lowcase ?answer))))
      )
@@ -524,10 +524,11 @@
                    (range $?range)
                    (choices $?choices)
         		   (has-pre-condition no))
+    ; (userid (value ?uid))
     (not (answer (known-factor ?factor)))
    =>
     (assert (answer (known-factor ?factor)
-                      (value (ask ?question ?choices ?range))))
+                      (value (ask ?question ?choices ?range "{user_id}"))))
 ;    (modify ?q (already-asked yes)) 
 )
 
@@ -682,7 +683,7 @@
     (printout t crlf crlf)
     (printout t "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
         		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
-        		"staying single is " (- 100 ?cf) " %~" crlf crlf)
+        		"staying single is " (- 100 ?cf) " %~" "#{user_id}#" crlf crlf)
     ; (printout results_file "Based on your responses and following factors I think that you have a '" (ExpressCfAsChance ?cf) "' chance of a successful marriage." crlf
     ;     		"To be exact my confidence favouring getting married is " ?cf " % and" crlf 
     ;     		"staying single is " (- 100 ?cf) " %" crlf crlf)
@@ -692,7 +693,7 @@
     (declare (salience -5000))
     ?c<- (conclusion (confidence-factor ?cf) (name ?n&~final-get-married-factor))
     =>
-    (printout t ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %~" crlf)    
+    (printout t ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %~" "#{user_id}#" crlf)    
     ; (printout results_file ".  	Factor " (upcase ?n) ", confidence rating:" ?cf " %" crlf)
 )
 
@@ -702,7 +703,7 @@
     (answer (known-factor ?f) (value ?a))
 
     =>
-    (printout t ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a "~"crlf)   
+    (printout t ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a "~" "#{user_id}#" crlf)   
     ; (printout questions_file ".  	QUESTION: " ?q crlf ".  	ANSWER: " ?a crlf)    
-)
+) 
 

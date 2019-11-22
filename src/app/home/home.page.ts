@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
   results_caption = null; 
   showGrid = false;
   showResponses = false;
+  socketUUID : any = null;
 
   constructor(private socket: Socket) {
   }
@@ -33,10 +34,10 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     this.socket.connect();
 
-    let name = `user-${new Date().getTime()}`;
+    this.socketUUID = `user-${new Date().getTime()}`;
     // this.currentUser = name;
 
-    this.socket.emit('start_clips', name);
+    this.socket.emit('start_clips', this.socketUUID);
 
     this.socket.fromEvent('clips_response').subscribe(data => {
       // let user = data['user'];
@@ -72,8 +73,8 @@ export class HomePage implements OnInit {
 
 
 
-      if (response.includes('~.')) {
-        let arr = response.split('~.');
+      if (response.includes('~#')) {
+        let arr = response.split('~#');
 
         arr.forEach(e => {
           let regex_results = /.*'(.*)'.*getting married is (.*) % and.*single is (.*) %/;
@@ -108,6 +109,9 @@ export class HomePage implements OnInit {
                 break;
             }
 
+            let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+            this.socket.emit('close_session', "",p); 
+
           }
 
           let regex_factor = /Factor (.*),.*rating:(.*) %/;
@@ -133,14 +137,15 @@ export class HomePage implements OnInit {
 
   resetClicked(e) {
     this.results = null;
-    let name = `user-${new Date().getTime()}`;
-    this.socket.emit('start_clips', name);
+    this.socketUUID = `user-${new Date().getTime()}`;
+    this.socket.emit('start_clips', this.socketUUID);
     this.showGrid = false;
     this.showResponses = false;
   }
 
   onChoicesListChange(e) {
-    this.socket.emit('user_response', e.target.value);
+    let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+    this.socket.emit('user_response', e.target.value, p);
   }
 
   validateResponse() {
@@ -160,12 +165,14 @@ export class HomePage implements OnInit {
   }
 
   onSendInput(e) {
-    this.socket.emit('user_response', this.selectedRange);
+    let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+    this.socket.emit('user_response', this.selectedRange, p);
   }
 
   keyupEnter() {
     if (this.validateResponse()) {
-      this.socket.emit('user_response', this.selectedRange);
+      let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+      this.socket.emit('user_response', this.selectedRange, p);
     }
   }
 
