@@ -16,8 +16,8 @@ const { spawn } = require('child_process');
 var socketUUID_to_childprocess = {}
 var socketUUID_to_SocketId = {}
 
-// const htmlPath = '/www';
-const htmlPath = 'C:/socrates/Socrates/www';
+const htmlPath = '/www';
+// const htmlPath = 'C:/socrates/Socrates/www';
 
 //app.use(express.static(__dirname + '/images/'))
 app.use(bodyParser.json())
@@ -73,8 +73,8 @@ io.on('connection', (socket) => {
 
         if (child == null) {
             //child.kill('SIGINT');
-             child = spawn(__dirname + '\\CLIPSDOS64.exe');
-            //child = spawn('clips');
+            // child = spawn(__dirname + '\\CLIPSDOS64.exe');
+            child = spawn('clips');
             socketUUID_to_childprocess[socketUUID] = child;
             socket.childprocess = child;
         }
