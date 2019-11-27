@@ -22,10 +22,15 @@ export class HomePage implements OnInit {
   matchFactors = [];
   questionAnswers = [];
   results_image_source = null;
-  results_caption = null; 
+  results_caption = null;
   showGrid = false;
   showResponses = false;
-  socketUUID : any = null;
+  socketUUID: any = null;
+  startEngine = false;
+  resetButtonColor = 'red';
+  resultsIconName = 'heart';
+  resultsIconColor = 'red';
+  greetings = '';
 
   constructor(private socket: Socket) {
   }
@@ -82,36 +87,50 @@ export class HomePage implements OnInit {
           if (match_results != null) {
             this.results = { confidence_factor: match_results[1], married: match_results[2], not_married: match_results[3] }
             let cf = this.results.confidence_factor;
-            // cf = 'low';
-            let succ_fac = Math.round( parseInt(this.results.married)); 
-            let fail_fac = Math.round( parseInt(this.results.not_married));
+            // cf = 'average';
+            let succ_fac = Math.round(parseInt(this.results.married));
+            let fail_fac = Math.round(parseInt(this.results.not_married));
 
             switch (cf) {
               case "extremely low":
-                this.results_image_source = "../assets/imgs/extremely low.jpg";
+                //this.results_image_source = "../assets/imgs/extremely low.jpg";
+                this.resultsIconName = 'heart-dislike';
+                this.resultsIconColor = 'white';
+                this.greetings = 'Sympathies';
                 this.results_caption = `Socrates Artificial Intelligence recommends that you not get married, as the likelyhood of a failed marriage is ${fail_fac} %`;
                 break;
               case "low":
-                this.results_image_source = "../assets/imgs/low.png";
+                // this.results_image_source = "../assets/imgs/low.png";
+                this.greetings = 'Sympathies';
+                this.resultsIconName = 'heart-empty';
+                this.resultsIconColor = 'gray';
                 this.results_caption = `Socrates Artificial Intelligence recommends that you not get married, as the likelyhood of a failed marriage is ${fail_fac} %`;
                 break;
               case "average":
-                this.results_image_source = "../assets/imgs/average.jpg";
+                this.greetings = 'Congratulations !!';
+                // this.results_image_source = "../assets/imgs/average.jpg";
+                this.resultsIconName = 'heart-half';
+                this.resultsIconColor = 'green';
                 this.results_caption = `Socrates Artificial Intelligence predicts that you have an average likelyhood of a successful marrige with a likelyhood of ${succ_fac} %`;
                 break;
               case "high":
+                  this.greetings = 'Congratulations !!';
+                this.resultsIconName = 'heart';
+                this.resultsIconColor = 'red';
                 this.results_image_source = "../assets/imgs/high.jpg";
                 this.results_caption = `Socrates Artificial Intelligence predicts that you will have a successful marriage with a likelyhood of ${succ_fac} %`;
                 break;
               case "extremely high":
+                this.resultsIconName = 'heart';
+                this.resultsIconColor = 'red';
                 this.results_image_source = "../assets/imgs/extremely high.jpg";
                 this.results_caption = `Socrates Artificial Intelligence predicts that you will have a very successful marriage with a likelyhood of ${succ_fac} %`;
                 break;
             }
 
-            let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
-            this.socket.emit('close_session', "",p); 
-
+            let p: any = { userid: this.socketUUID, sock_id: this.socket.ioSocket.id };
+            this.socket.emit('close_session', "", p);
+            this.resetButtonColor = 'chartreuse';
           }
 
           let regex_factor = /Factor (.*),.*rating:(.*) %/;
@@ -141,10 +160,13 @@ export class HomePage implements OnInit {
     this.socket.emit('start_clips', this.socketUUID);
     this.showGrid = false;
     this.showResponses = false;
+    this.startEngine = false;
+    this.resetButtonColor = 'red';
+
   }
 
   onChoicesListChange(e) {
-    let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+    let p: any = { userid: this.socketUUID, sock_id: this.socket.ioSocket.id };
     this.socket.emit('user_response', e.target.value, p);
   }
 
@@ -165,23 +187,27 @@ export class HomePage implements OnInit {
   }
 
   onSendInput(e) {
-    let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+    let p: any = { userid: this.socketUUID, sock_id: this.socket.ioSocket.id };
     this.socket.emit('user_response', this.selectedRange, p);
   }
 
   keyupEnter() {
     if (this.validateResponse()) {
-      let p : any = {userid : this.socketUUID , sock_id : this.socket.ioSocket.id};
+      let p: any = { userid: this.socketUUID, sock_id: this.socket.ioSocket.id };
       this.socket.emit('user_response', this.selectedRange, p);
     }
   }
 
-  onShowReasoning(e){
+  onShowReasoning(e) {
     this.showGrid = !this.showGrid
   }
 
-  onShowResponses(e){
-    this.showResponses = !this.showResponses
+  onShowResponses(e) {
+    this.showResponses = !this.showResponses;
   }
 
+  playClicked(e) {
+    this.resetButtonColor = 'chartreuse';
+    this.startEngine = true;
+  }
 }

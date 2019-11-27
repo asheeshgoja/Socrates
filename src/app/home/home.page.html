@@ -1,33 +1,42 @@
 <ion-header translucent>
-  <!-- <ion-toolbar>
-    <ion-item color="" text-wrap>
-      <ion-title text-wrap style="font-family: Arizonia;text-align: center;font-size: 1.5em;color: darkblue;">
-        Socrates AI
-      </ion-title>
-    </ion-item>
-  </ion-toolbar> -->
   <ion-item>
-    <span
-      style="text-align: left;font-family: Arizonia;font-size: 2.3em;color:royalblue;font-weight: bolder;">Socrates</span>
-    <ion-title text-right>
-      <ion-icon name="power" style="font-size: 2.0em;color:chartreuse;" (click)="resetClicked($event)">
-      </ion-icon>
-    </ion-title>
+    <ion-row>
+      <ion-col text-left lign-self-end size="10">
+        <p style="font-family: Pacifico;font-size: 1.6em;color:royalblue;font-weight: bolder;">Socrates - The AI
+          Marriage Advisor</p>
+      </ion-col>
+      <ion-col align-self-center size="1">
+        <ion-icon name="power" style="font-size: 2.0em;" (click)="resetClicked($event)"
+          [ngStyle]="{color:resetButtonColor}"></ion-icon>
+      </ion-col>
+    </ion-row>
   </ion-item>
+
 </ion-header>
 
-<ion-content fullscreen>
-  <ion-item > 
 
-    <p style="font-family: Arizonia;font-size: 1.2em;color:aqua;text-align:center;">
-      The AI Marriage Advisor
-    </p>
+
+<ion-content fullscreen>
+
+
+  <ion-item *ngIf="!startEngine">
+    <ion-row>
+      <ion-col text-left size="10" align-self-end>
+        <p style="font-family: Arizonia;font-size: 1.3em;color:greenyellow;">
+          I am here to help you with your nuptial predicament. 
+        </p>
+        <p style="font-family: Arizonia;font-size: 1.3em;color:greenyellow;">So lets get started</p>
+      </ion-col>
+      <ion-col text-left align-self-end size="1">
+        <ion-icon name="play" style="font-size: 1.7em;color:coral;" (click)="playClicked($event)"></ion-icon>
+      </ion-col>
+    </ion-row>
 
   </ion-item>
 
 
-  <ion-item *ngIf="this.results == null" class="top">
-    <ion-label class="ion-text-wrap" style="font-family: Leckerli One;font-size:.8em;color:cornflowerblue ">
+  <ion-item *ngIf="this.results == null && startEngine" class="top">
+    <ion-label class="ion-text-wrap" style="font-family: Leckerli One;font-size:.8em;color:gold ">
       {{inputText}}</ion-label>
 
     <ion-select [(ngModel)]="choices_selectbox" *ngIf="choices != null" (ionChange)="onChoicesListChange($event)"
@@ -53,31 +62,33 @@
       <!-- <img src="../assets/imgs/h2.jpg"> -->
       <ion-grid>
         <ion-row>
-          <ion-col text-right size="6">
-            <ion-icon name="heart" style="font-size: 4.1em;text-align: right; color: red;"></ion-icon>
+          <ion-col align-self-center text-left size="3">
+            <ion-icon name={{resultsIconName}} [ngStyle]="{color:resultsIconColor}" style="font-size: 4.1em;text-align: right;" ></ion-icon>
           </ion-col>
-          <ion-col text-left size="6">
-            <p style="font-family: Pacifico;color: forestgreen;">Congratulations !!</p>
+          <ion-col text-left size="9">
+            <p style="font-family: Pacifico;color: forestgreen;">{{greetings}}</p>
+            <p style="font-family: Leckerli One;color: blueviolet;">{{results_caption}}</p>
           </ion-col>
         </ion-row>
       </ion-grid>
 
     </div>
 
-    <div class="item item-image" class="dark-theme">
+    <!-- <div class="item item-image" class="dark-theme">
       <ion-row>
         <ion-col size="2">
-          <img *ngIf="results_image_source" src="../assets/imgs/brain.jpg">
+          <img *ngIf="!results_image_source" src="../assets/imgs/brain.jpg">
         </ion-col>
         <ion-col size="10">
-          <p style="font-family: Leckerli One;color: blueviolet;">{{results_caption}}</p>
+          <p style="font-family: Leckerli One;color: blueviolet;">Socrates Artificial Intelligence recommends that you not get married, as the likelyhood of a failed marriage is{{results_caption}}</p>
         </ion-col>
       </ion-row>
-    </div>
+    </div> -->
     <div>
       <ion-row text-center>
         <ion-col>
-          <ion-button color="light" (click)="onShowReasoning($event)" style="font-family: Leckerli One;">why</ion-button>
+          <ion-button color="light" (click)="onShowReasoning($event)" style="font-family: Leckerli One;">why
+          </ion-button>
         </ion-col>
       </ion-row>
     </div>
@@ -99,7 +110,8 @@
     </ion-row>
     <ion-row text-center>
       <ion-col>
-        <ion-button color="light" (click)="onShowResponses($event)" style="font-family: Leckerli One;" >Responses</ion-button>
+        <ion-button color="light" (click)="onShowResponses($event)" style="font-family: Leckerli One;">Responses
+        </ion-button>
       </ion-col>
     </ion-row>
 
