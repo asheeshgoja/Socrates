@@ -1,5 +1,5 @@
-#npm install -g @angular/cli
-ng build --prod
+npm install -g @angular/cli
+ng build --prod --source-map
 rm -fr socrates_bff/www/
 cp -r www/ socrates_bff/
 cd socrates_bff

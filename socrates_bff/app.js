@@ -73,8 +73,8 @@ io.on('connection', (socket) => {
 
         if (child == null) {
             //child.kill('SIGINT');
-             child = spawn(__dirname + '\\CLIPSDOS64.exe');
-            //child = spawn('clips');
+            // child = spawn(__dirname + '\\CLIPSDOS64.exe');
+            child = spawn('clips');
             socketUUID_to_childprocess[socketUUID] = child;
             socket.childprocess = child;
         }
