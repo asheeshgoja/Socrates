@@ -1,5 +1,7 @@
 {
   "name": "SocratesMobileApp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

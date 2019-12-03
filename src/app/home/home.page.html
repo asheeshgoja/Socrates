@@ -1,11 +1,15 @@
 <ion-header translucent>
   <ion-item>
     <ion-row>
-      <ion-col text-left lign-self-end size="10">
-        <p style="font-family: Pacifico;font-size: 1.6em;color:royalblue;font-weight: bolder;">Welcome to Socrates, the AI
+      <ion-col text-left align-self-center size="2">
+        <img src="../assets/icons/icon-invert.png" (click)="onUnderTheHood($event)">
+      </ion-col>
+      <ion-col text-left lign-self-end size="8">
+        <p style="font-family: Uncial Antiqua, cursive;font-size: 1.3em;color:royalblue;font-weight: bolder;">Welcome to
+          Socrates, the AI
           Marriage Advisor</p>
       </ion-col>
-      <ion-col align-self-center size="1">
+      <ion-col align-self-center size="2">
         <ion-icon name="power" style="font-size: 2.0em;" (click)="resetClicked($event)"
           [ngStyle]="{color:resetButtonColor}"></ion-icon>
       </ion-col>
@@ -22,10 +26,10 @@
   <ion-item *ngIf="!startEngine">
     <ion-row>
       <ion-col text-left size="10" align-self-end>
-        <p style="font-family: Arizonia;font-size: 1.3em;color:greenyellow;">
-          I am here to help you with your nuptial predicament. 
+        <p style="font-family: Rye;font-size: 1.0em;color:greenyellow;">
+          I am here to help you with your nuptial predicament.
         </p>
-        <p style="font-family: Arizonia;font-size: 1.3em;color:greenyellow;">So lets get started</p>
+        <p style="font-family: Rye;font-size: 1.0em;color:greenyellow;">So lets get started</p>
       </ion-col>
       <ion-col text-left align-self-end size="1">
         <ion-icon name="play" style="font-size: 1.7em;color:coral;" (click)="playClicked($event)"></ion-icon>
@@ -36,7 +40,7 @@
 
 
   <ion-item *ngIf="this.results == null && startEngine" class="top">
-    <ion-label class="ion-text-wrap" style="font-family: Leckerli One;font-size:.8em;color:gold ">
+    <ion-label class="ion-text-wrap" style="font-family: Special Elite;font-size:1.2em;color:gold ">
       {{inputText}}</ion-label>
 
     <ion-select [(ngModel)]="choices_selectbox" *ngIf="choices != null" (ionChange)="onChoicesListChange($event)"
@@ -50,7 +54,7 @@
     <ion-input id="range_input" [(ngModel)]="selectedRange" required="true" clearInput=true type="number" pattern="\d*"
       (ionChange)="onInputTextChange($event.target.value)" (keyup.enter)="keyupEnter()"
       placeholder="valid range {{range.min}} to {{range.max}}"
-      style="font-family: Leckerli One;font-size:.8em;color:cornflowerblue ">
+      style="font-family: Special Elite;font-size:1.2em;color:cornflowerblue ">
     </ion-input>
     <ion-button *ngIf="this.validInput" (click)="onSendInput($event)">&#8594;</ion-button><br><br>
   </ion-item>
@@ -63,31 +67,23 @@
       <ion-grid>
         <ion-row>
           <ion-col align-self-center text-left size="3">
-            <ion-icon name={{resultsIconName}} [ngStyle]="{color:resultsIconColor}" style="font-size: 4.1em;text-align: right;" ></ion-icon>
+            <ion-icon name={{resultsIconName}} [ngStyle]="{color:resultsIconColor}"
+              style="font-size: 4.1em;text-align: right;"></ion-icon>
           </ion-col>
           <ion-col text-left size="9">
-            <p style="font-family: Pacifico;color: forestgreen;">{{greetings}}</p>
-            <p style="font-family: Leckerli One;color: blueviolet;">{{results_caption}}</p>
+            <p style="font-family: Fauna One;color: forestgreen;">{{greetings}}</p>
+            <p style="font-family: Fauna One;color: blueviolet;">{{results_caption}}</p>
           </ion-col>
         </ion-row>
       </ion-grid>
 
     </div>
 
-    <!-- <div class="item item-image" class="dark-theme">
-      <ion-row>
-        <ion-col size="2">
-          <img *ngIf="!results_image_source" src="../assets/imgs/brain.jpg">
-        </ion-col>
-        <ion-col size="10">
-          <p style="font-family: Leckerli One;color: blueviolet;">Socrates Artificial Intelligence recommends that you not get married, as the likelyhood of a failed marriage is{{results_caption}}</p>
-        </ion-col>
-      </ion-row>
-    </div> -->
+
     <div>
       <ion-row text-center>
         <ion-col>
-          <ion-button color="light" (click)="onShowReasoning($event)" style="font-family: Leckerli One;">why
+          <ion-button color="light" (click)="onShowReasoning($event)" style="font-family: Fauna One;">why
           </ion-button>
         </ion-col>
       </ion-row>
@@ -95,7 +91,7 @@
   </div>
 
 
-  <ion-grid *ngIf="this.showGrid" text-center style="font-family: Leckerli One;font-size:.8em;color:cornflowerblue ">
+  <ion-grid *ngIf="this.showGrid" text-center style="font-family: Fauna One;font-size:.8em;color:cornflowerblue ">
 
     <ion-row>
       <!-- <ion-col>
@@ -104,13 +100,16 @@
       </ion-col> -->
     </ion-row>
     <ion-row *ngFor="let matchFactor of matchFactors">
-      <ion-col>
-        <div>{{matchFactor.factor}} : {{matchFactor.value}}</div>
+      <ion-col text-right>
+        {{matchFactor.factor}} :
+      </ion-col>
+      <ion-col text-left>
+        {{matchFactor.value}}
       </ion-col>
     </ion-row>
     <ion-row text-center>
       <ion-col>
-        <ion-button color="light" (click)="onShowResponses($event)" style="font-family: Leckerli One;">Responses
+        <ion-button color="light" (click)="onShowResponses($event)" style="font-family: Architects Daughter;">Responses
         </ion-button>
       </ion-col>
     </ion-row>
@@ -122,14 +121,22 @@
       </ion-col>
     </ion-row> -->
     <ion-row *ngFor="let questionAnswer of questionAnswers" text-center>
-      <ion-col *ngIf="this.showResponses">
-        <div>{{questionAnswer.question}} : {{questionAnswer.answer}}</div>
+      <ion-col text-right align-self-end *ngIf="this.showResponses">
+        {{questionAnswer.question}} :
+      </ion-col>
+      <ion-col text-left align-self-end *ngIf="this.showResponses">
+        {{questionAnswer.answer}}
       </ion-col>
     </ion-row>
 
   </ion-grid>
   <br><br>
-
+  <ion-row text-center>
+    <ion-col>
+      <ion-button color="light" (click)="onUnderTheHood($event)" style="font-family: Architects Daughter;" *ngIf="this.showResponses">Under The Hood
+      </ion-button>
+    </ion-col>
+  </ion-row>
 
 
 </ion-content>

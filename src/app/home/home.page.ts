@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { Platform } from '@ionic/angular';
 
 
 @Component({
@@ -32,25 +33,22 @@ export class HomePage implements OnInit {
   resultsIconColor = 'red';
   greetings = '';
 
-  constructor(private socket: Socket) {
+  constructor(private socket: Socket, private platform: Platform) {
   }
 
   goFullScreen() {
-    var doc = window.document;
-    var docEl = doc.documentElement;
+    if (this.platform.is('pwa')) {
+      var doc = window.document;
+      var docEl = doc.documentElement;
 
-    var requestFullScreen = docEl.requestFullscreen;
-    var cancelFullScreen = doc.exitFullscreen;
+      var requestFullScreen = docEl.requestFullscreen;
+      var cancelFullScreen = doc.exitFullscreen;
 
-    // if(!doc.fullscreenElement ) {
-    requestFullScreen.call(docEl);
-    // }
-    // else {
-    //   cancelFullScreen.call(doc);
-    // }
+      requestFullScreen.call(docEl);
+    }
   }
 
-  ngOnInit(): void {     
+  ngOnInit(): void {
 
     this.socket.connect();
 
@@ -136,6 +134,7 @@ export class HomePage implements OnInit {
                 this.results_caption = `Socrates Artificial Intelligence predicts that you will have a successful marriage with a likelyhood of ${succ_fac} %`;
                 break;
               case "extremely high":
+                this.greetings = 'Congratulations !!';
                 this.resultsIconName = 'heart';
                 this.resultsIconColor = 'red';
                 this.results_image_source = "../assets/imgs/extremely high.jpg";
@@ -228,4 +227,9 @@ export class HomePage implements OnInit {
     this.resetButtonColor = 'chartreuse';
     this.startEngine = true;
   }
+
+  onUnderTheHood(e) {
+    window.open('https://www.codeproject.com/Articles/179375/Man-Marriage-and-Machine-Adventures-in-Artificia', '_system', 'location=yes');
+  }
+
 }

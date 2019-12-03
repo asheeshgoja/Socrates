@@ -23,23 +23,20 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.goFullScreen() ;
+      this.goFullScreen();
     });
   }
 
   goFullScreen() {
-    var doc = window.document;
-    var docEl = doc.documentElement;
+    if (this.platform.is('cordova')) {
+      var doc = window.document;
+      var docEl = doc.documentElement;
 
-    var requestFullScreen = docEl.requestFullscreen;
-    var cancelFullScreen = doc.exitFullscreen;
+      var requestFullScreen = docEl.requestFullscreen;
+      var cancelFullScreen = doc.exitFullscreen;
+      requestFullScreen.call(docEl);
 
-    // if(!doc.fullscreenElement ) {
-    requestFullScreen.call(docEl);
-    // }
-    // else {
-    //   cancelFullScreen.call(doc);
-    // }
+    }
   }
 
 }
