@@ -35,8 +35,23 @@ export class HomePage implements OnInit {
   constructor(private socket: Socket) {
   }
 
+  goFullScreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
 
-  ngOnInit(): void {
+    var requestFullScreen = docEl.requestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen;
+
+    // if(!doc.fullscreenElement ) {
+    requestFullScreen.call(docEl);
+    // }
+    // else {
+    //   cancelFullScreen.call(doc);
+    // }
+  }
+
+  ngOnInit(): void {     
+
     this.socket.connect();
 
     this.socketUUID = `user-${new Date().getTime()}`;
@@ -114,7 +129,7 @@ export class HomePage implements OnInit {
                 this.results_caption = `Socrates Artificial Intelligence predicts that you have an average likelyhood of a successful marrige with a likelyhood of ${succ_fac} %`;
                 break;
               case "high":
-                  this.greetings = 'Congratulations !!';
+                this.greetings = 'Congratulations !!';
                 this.resultsIconName = 'heart';
                 this.resultsIconColor = 'red';
                 this.results_image_source = "../assets/imgs/high.jpg";
@@ -184,17 +199,20 @@ export class HomePage implements OnInit {
 
   onInputTextChange(e) {
     this.validInput = this.validateResponse();
+    this.goFullScreen();
   }
 
   onSendInput(e) {
     let p: any = { userid: this.socketUUID, sock_id: this.socket.ioSocket.id };
     this.socket.emit('user_response', this.selectedRange, p);
+    this.goFullScreen();
   }
 
   keyupEnter() {
     if (this.validateResponse()) {
       let p: any = { userid: this.socketUUID, sock_id: this.socket.ioSocket.id };
       this.socket.emit('user_response', this.selectedRange, p);
+      this.goFullScreen();
     }
   }
 

@@ -23,6 +23,23 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.goFullScreen() ;
     });
   }
+
+  goFullScreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen;
+
+    // if(!doc.fullscreenElement ) {
+    requestFullScreen.call(docEl);
+    // }
+    // else {
+    //   cancelFullScreen.call(doc);
+    // }
+  }
+
 }
