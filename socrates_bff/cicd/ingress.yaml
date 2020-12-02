@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: socrates-socket-server-https-loadbalancer-ingress
+  namespace: socket-server
 spec:
   rules:
     - http:

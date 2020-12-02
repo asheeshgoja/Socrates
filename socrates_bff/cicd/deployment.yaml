@@ -1,9 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: socrates-socket-server-deployment
+  namespace: socket-server
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: socrates-socket-server
   template:
     metadata:
       labels:
@@ -11,7 +15,7 @@ spec:
     spec:
       containers:
       - name: socrates-socket-server
-        image: "gcr.io/agoja-sandbox/clips-socrates:latest"
+        image: "gcr.io/ups-next-tracking-as-a-service/clips-socrates:latest"
         imagePullPolicy: Always
         ports:
         - name: http-server
@@ -26,7 +30,7 @@ metadata:
   labels:
     app: socrates-socket-server
   name: socrates-socket-server-service
-  namespace: default
+  namespace: socket-server
 spec:
   ports:
   - port: 80
